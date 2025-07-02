@@ -1,0 +1,21 @@
+{
+  "log": {
+    "level": 6
+  },
+  "web": {
+    "prefork": false,
+    "port": 3000
+  },
+  "database": {
+    "username": "root",
+    "password": "140407",
+    "host": "localhost",
+    "port": 3306,
+    "name": "svdb",
+    "pool": {
+      "idle": 10,
+      "max": 100,
+      "lifetime": 300
+    }
+  }
+}
