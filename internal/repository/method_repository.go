@@ -22,36 +22,35 @@ func (mr *MethodRepository) FindById(db *gorm.DB, method *entity.PaymentMethod, 
 	return db.Where("id = ?", id).Take(method).Error
 }
 
-func (mr *MethodRepository) FilterMethod(db *gorm.DB, request *model.FilterMethodRequest) ([]entity.PaymentMethod, int64, error) {
+
+func (mr *MethodRepository) FilterMethod(request *model.FilterMethodRequest) func(tx *gorm.DB) *gorm.DB {
+	return func(tx *gorm.DB) *gorm.DB {
+		if code := request.Code; code != "" {
+			code = "%" + code + "%"
+			tx = tx.Where("code LIKE ?", code)
+		}
+		if name := request.Name; name != "" {
+			name = "%" + name + "%"
+			tx = tx.Where("name LIKE ?", name)
+		}
+	return tx
+	}
+}
+
+func (mr *MethodRepository) Search(db *gorm.DB, request *model.FilterMethodRequest) ([]entity.PaymentMethod, int64, error) {
 	var methods []entity.PaymentMethod
-	var total int64
-
-	query := db.Model(&entity.PaymentMethod{})
-
-	if request.Code != "" {
-		query = query.Where("code ILIKE ?", "%"+request.Code+"%")
-	}
-	if request.Name != "" {
-		query = query.Where("name ILIKE ?", "%"+request.Name+"%")
-	}
-
-	if err := query.Count(&total).Error; err != nil {
+	if err := db.Scopes(mr.FilterMethod(request)).Offset((request.Page - 1) * request.Limit).Find(&methods).Error; err != nil {
 		return nil, 0, err
 	}
 
-	offset := (request.Page - 1) * request.Limit
-
-	if request.Page < 1 {
-		request.Page = 1
-	}
-	if request.Limit < 1 {
-		request.Limit = 10
-	}
-
-	if err := query.Limit(request.Limit).Offset(offset).Order("id DESC").Find(&methods).Error; err != nil {
-		mr.Log.WithError(err).Error("Failed to filter payment methods")
+	var total int64 = 0
+	if err := db.Model(&entity.PaymentMethod{}).Scopes(mr.FilterMethod(request)).Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
 
 	return methods, total, nil
 }
+
+
+
+

@@ -91,7 +91,7 @@ func (m *MethodUseCase) Get(ctx context.Context, request *model.FilterMethodRequ
 		return nil, 0, fiber.ErrBadRequest
 	}
 
-	methods, total, err := m.MethodRepository.FilterMethod(tx, request)
+	methods, total, err := m.MethodRepository.Search(tx, request)
 	if err != nil {
 		m.Log.WithError(err).Error("Failed to filter payment methods")
 		return nil, 0, fiber.ErrInternalServerError
