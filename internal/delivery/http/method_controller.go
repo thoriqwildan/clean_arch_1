@@ -32,7 +32,7 @@ func (mc *MethodController) Create(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	return ctx.JSON(model.WebResponse[model.MethodResponse]{Data: *response})
+	return ctx.JSON(model.WebResponse[model.MethodResponse]{Success: true, Data: *response})
 }
 
 func (mc *MethodController) FindById(ctx *fiber.Ctx) error {
@@ -47,7 +47,7 @@ func (mc *MethodController) FindById(ctx *fiber.Ctx) error {
 		mc.Log.WithError(err).Error("Failed to find payment method")
 		return err
 	}
-	return ctx.JSON(model.WebResponse[model.MethodResponse]{Data: *method})
+	return ctx.JSON(model.WebResponse[model.MethodResponse]{Success: true, Data: *method})
 }
 
 func (mc *MethodController) Filter(ctx *fiber.Ctx) error {
@@ -71,6 +71,7 @@ func (mc *MethodController) Filter(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.JSON(model.WebResponse[[]model.MethodResponse]{
+		Success: true,
 		Data: responses,
 		Meta: paging,
 	})
@@ -91,7 +92,7 @@ func (mc *MethodController) Update(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	return ctx.JSON(model.WebResponse[model.MethodResponse]{Data: *response})
+	return ctx.JSON(model.WebResponse[model.MethodResponse]{Success: true, Data: *response})
 }
 
 func (mc *MethodController) Delete(ctx *fiber.Ctx) error {
@@ -106,5 +107,5 @@ func (mc *MethodController) Delete(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	return ctx.SendStatus(fiber.StatusNoContent)
+	return ctx.JSON(model.WebResponse[any]{Success: true, Data: nil})
 }

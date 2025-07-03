@@ -32,7 +32,7 @@ func (cc *ChannelController) Create(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	return ctx.JSON(model.WebResponse[model.ChannelResponse]{Data: *response})
+	return ctx.JSON(model.WebResponse[model.ChannelResponse]{Success: true, Data: *response})
 }
 
 func (cc *ChannelController) FindById(ctx *fiber.Ctx) error {
@@ -47,7 +47,7 @@ func (cc *ChannelController) FindById(ctx *fiber.Ctx) error {
 		cc.Log.WithError(err).Error("Failed to find payment channel")
 		return err
 	}
-	return ctx.JSON(model.WebResponse[model.ChannelResponse]{Data: *response})
+	return ctx.JSON(model.WebResponse[model.ChannelResponse]{Success: true, Data: *response})
 }
 
 func (cc *ChannelController) Get(ctx *fiber.Ctx) error {
@@ -71,6 +71,7 @@ func (cc *ChannelController) Get(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.JSON(model.WebResponse[[]model.ChannelResponse]{
+		Success: true,
 		Data: responses,
 		Meta: paging,
 	})
@@ -96,7 +97,7 @@ func (cc *ChannelController) Update(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	return ctx.JSON(model.WebResponse[model.ChannelResponse]{Data: *response})
+	return ctx.JSON(model.WebResponse[model.ChannelResponse]{Success: true, Data: *response})
 }
 
 func (cc *ChannelController) Delete(ctx *fiber.Ctx) error {
@@ -111,5 +112,5 @@ func (cc *ChannelController) Delete(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	return ctx.JSON(model.WebResponse[any]{Data: nil})
+	return ctx.JSON(model.WebResponse[any]{Success: true, Data: nil})
 }

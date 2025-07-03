@@ -3,6 +3,7 @@ package config
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/spf13/viper"
+	"github.com/thoriqwildan/clean_arch_1/internal/model"
 )
 
 func NewFiber(viper *viper.Viper) *fiber.App {
@@ -18,13 +19,15 @@ func NewFiber(viper *viper.Viper) *fiber.App {
 func NewErrorHandler() fiber.ErrorHandler {
 	return func(ctx *fiber.Ctx, err error) error {
 		if e, ok := err.(*fiber.Error); ok {
-			return ctx.Status(e.Code).JSON(fiber.Map{
-				"error": e.Message,
+			return ctx.Status(e.Code).JSON(&model.WebResponse[any]{
+				Success: false,
+				Error:   e.Message,
 			})
 		}
 
-		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Internal Server Error",
+		return ctx.Status(fiber.StatusInternalServerError).JSON(model.WebResponse[any]{
+			Success: false,
+			Error:   "Internal Server Error",
 		})
 	}
 }
