@@ -3,8 +3,9 @@ package main
 import (
 	"strconv"
 
-	"github.com/gofiber/swagger"
+	"github.com/gofiber/fiber/v2"
 
+	"github.com/MarceloPetrucio/go-scalar-api-reference"
 	_ "github.com/thoriqwildan/clean_arch_1/docs"
 	"github.com/thoriqwildan/clean_arch_1/internal/config"
 )
@@ -28,7 +29,17 @@ func main() {
 		Validate: validator,
 	})
 
-	app.Get("/swagger/*", swagger.HandlerDefault)
+	app.Get("/reference", func(ctx *fiber.Ctx) error {
+		html, err := scalar.ApiReferenceHTML(&scalar.Options{
+			SpecURL: "./docs/swagger.json",
+			DarkMode: true,
+		})
+		if err != nil {
+			log.Error("Failed to generate API reference HTML: " + err.Error())
+			return ctx.Status(fiber.StatusInternalServerError).SendString("Failed to generate API reference HTML")
+		}
+		return ctx.Type("html").SendString(html)
+	})
 
 	webPort := ":" + strconv.Itoa(viperConfig.GetInt("web.port"))
 	err := app.Listen(webPort)
