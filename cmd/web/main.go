@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 
 	"github.com/MarceloPetrucio/go-scalar-api-reference"
 	_ "github.com/thoriqwildan/clean_arch_1/docs"
@@ -28,6 +29,13 @@ func main() {
 		Log: log,
 		Validate: validator,
 	})
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "*",
+		AllowMethods:     "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
+		ExposeHeaders:    "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers",
+	}))
 
 	app.Get("/reference", func(ctx *fiber.Ctx) error {
 		html, err := scalar.ApiReferenceHTML(&scalar.Options{
