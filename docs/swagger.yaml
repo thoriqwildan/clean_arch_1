@@ -75,9 +75,73 @@ definitions:
     - paymentMethodId
     - userAction
     type: object
+  model.CreateMethodRequest:
+    properties:
+      code:
+        type: string
+      desc:
+        type: string
+      name:
+        type: string
+      orderNum:
+        type: integer
+      userAction:
+        type: string
+    required:
+    - code
+    - name
+    - userAction
+    type: object
   model.ErrorWrapper:
     properties:
       data: {}
+      error:
+        type: string
+      meta:
+        $ref: '#/definitions/model.PaginationPage'
+      success:
+        type: boolean
+    type: object
+  model.MethodResponse:
+    properties:
+      code:
+        type: string
+      createdAt:
+        type: string
+      desc:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      orderNum:
+        type: integer
+      updatedAt:
+        type: string
+      userAction:
+        type: string
+    required:
+    - code
+    - name
+    - userAction
+    type: object
+  model.MethodResponseWrapper:
+    properties:
+      data:
+        $ref: '#/definitions/model.MethodResponse'
+      error:
+        type: string
+      meta:
+        $ref: '#/definitions/model.PaginationPage'
+      success:
+        type: boolean
+    type: object
+  model.MethodsResponseWrapper:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.MethodResponse'
+        type: array
       error:
         type: string
       meta:
@@ -125,6 +189,23 @@ definitions:
     - code
     - name
     - paymentMethodId
+    - userAction
+    type: object
+  model.UpdateMethodRequest:
+    properties:
+      code:
+        type: string
+      desc:
+        type: string
+      name:
+        type: string
+      orderNum:
+        type: integer
+      userAction:
+        type: string
+    required:
+    - code
+    - name
     - userAction
     type: object
 host: localhost:3000
@@ -285,4 +366,155 @@ paths:
       summary: Update a payment channel
       tags:
       - Channels
+  /api/methods:
+    get:
+      consumes:
+      - application/json
+      description: Find a payment methods by its ID.
+      parameters:
+      - description: Filter by method name
+        in: query
+        name: name
+        type: string
+      - description: Filter by method code
+        in: query
+        name: code
+        type: string
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page
+        in: query
+        name: limit
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MethodsResponseWrapper'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+      summary: Find a payment methods
+      tags:
+      - Methods
+    post:
+      consumes:
+      - application/json
+      description: Create a new payment method with the provided details.
+      parameters:
+      - description: Create Method Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateMethodRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MethodResponseWrapper'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+      summary: Create a new payment method
+      tags:
+      - Methods
+  /api/methods/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a payment method with the provided details.
+      parameters:
+      - description: Method ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MethodResponseWrapper'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+      summary: Delete a payment method
+      tags:
+      - Methods
+    get:
+      consumes:
+      - application/json
+      description: Find a payment method by its ID.
+      parameters:
+      - description: Method ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MethodResponseWrapper'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+      summary: Find a payment method by ID
+      tags:
+      - Methods
+    put:
+      consumes:
+      - application/json
+      description: Update a payment method with the provided details.
+      parameters:
+      - description: Update Method Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateMethodRequest'
+      - description: Method ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MethodResponseWrapper'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+      summary: Update a payment method
+      tags:
+      - Methods
 swagger: "2.0"

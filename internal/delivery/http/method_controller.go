@@ -19,6 +19,15 @@ func NewMethodController(useCase *usecase.MethodUseCase, log *logrus.Logger) *Me
 	}
 }
 
+// @Router /api/methods [post]
+// @Param  request body model.CreateMethodRequest true "Create Method Request"
+// @Success 200 {object} model.MethodResponseWrapper
+// @Failure 400 {object} model.ErrorWrapper "Bad Request"
+// @Failure 500 {object} model.ErrorWrapper "Internal Server Error"
+// @Tags Methods
+// @Summary Create a new payment method
+// @Description Create a new payment method with the provided details.
+// @Accept json
 func (mc *MethodController) Create(ctx *fiber.Ctx) error {
 	request := new(model.CreateMethodRequest)
 	if err := ctx.BodyParser(request); err != nil {
@@ -35,6 +44,15 @@ func (mc *MethodController) Create(ctx *fiber.Ctx) error {
 	return ctx.JSON(model.WebResponse[model.MethodResponse]{Success: true, Data: *response})
 }
 
+// @Router /api/methods/{id} [get]
+// @Success 200 {object} model.MethodResponseWrapper
+// @Failure 400 {object} model.ErrorWrapper "Bad Request"
+// @Failure 500 {object} model.ErrorWrapper "Internal Server Error"
+// @Tags Methods
+// @Summary Find a payment method by ID
+// @Description Find a payment method by its ID.
+// @Param id path string true "Method ID"
+// @Accept json
 func (mc *MethodController) FindById(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	if id == "" {
@@ -50,6 +68,18 @@ func (mc *MethodController) FindById(ctx *fiber.Ctx) error {
 	return ctx.JSON(model.WebResponse[model.MethodResponse]{Success: true, Data: *method})
 }
 
+// @Router /api/methods [get]
+// @Success 200 {object} model.MethodsResponseWrapper
+// @Failure 400 {object} model.ErrorWrapper "Bad Request"
+// @Failure 500 {object} model.ErrorWrapper "Internal Server Error"
+// @Tags Methods
+// @Summary Find a payment methods
+// @Description Find a payment methods by its ID.
+// @Param   name query     string            false       "Filter by method name"
+// @Param   code query     string            false       "Filter by method code"
+// @Param   page query     int               false       "Page number" default(1)
+// @Param   limit query    int               false       "Number of items per page" default
+// @Accept json
 func (mc *MethodController) Filter(ctx *fiber.Ctx) error {
 	request := &model.FilterMethodRequest{
 		Code: ctx.Query("code"),
@@ -77,6 +107,16 @@ func (mc *MethodController) Filter(ctx *fiber.Ctx) error {
 	})
 }
 
+// @Router /api/methods/{id} [put]
+// @Param  request body model.UpdateMethodRequest true "Update Method Request"
+// @Param id path string true "Method ID"
+// @Success 200 {object} model.MethodResponseWrapper
+// @Failure 400 {object} model.ErrorWrapper "Bad Request"
+// @Failure 500 {object} model.ErrorWrapper "Internal Server Error"
+// @Tags Methods
+// @Summary Update a payment method
+// @Description Update a payment method with the provided details.
+// @Accept json
 func (mc *MethodController) Update(ctx *fiber.Ctx) error {
 	request := new(model.UpdateMethodRequest)
 	if err := ctx.BodyParser(request); err != nil {
@@ -95,6 +135,15 @@ func (mc *MethodController) Update(ctx *fiber.Ctx) error {
 	return ctx.JSON(model.WebResponse[model.MethodResponse]{Success: true, Data: *response})
 }
 
+// @Router /api/methods/{id} [delete]
+// @Param id path string true "Method ID"
+// @Success 200 {object} model.MethodResponseWrapper
+// @Failure 400 {object} model.ErrorWrapper "Bad Request"
+// @Failure 500 {object} model.ErrorWrapper "Internal Server Error"
+// @Tags Methods
+// @Summary Delete a payment method
+// @Description Delete a payment method with the provided details.
+// @Accept json
 func (mc *MethodController) Delete(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	if id == "" {

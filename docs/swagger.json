@@ -236,6 +236,234 @@
                     }
                 }
             }
+        },
+        "/api/methods": {
+            "get": {
+                "description": "Find a payment methods by its ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Methods"
+                ],
+                "summary": "Find a payment methods",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Filter by method name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Filter by method code",
+                        "name": "code",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of items per page",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.MethodsResponseWrapper"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorWrapper"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorWrapper"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new payment method with the provided details.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Methods"
+                ],
+                "summary": "Create a new payment method",
+                "parameters": [
+                    {
+                        "description": "Create Method Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CreateMethodRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.MethodResponseWrapper"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorWrapper"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorWrapper"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/methods/{id}": {
+            "get": {
+                "description": "Find a payment method by its ID.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Methods"
+                ],
+                "summary": "Find a payment method by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Method ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.MethodResponseWrapper"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorWrapper"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorWrapper"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a payment method with the provided details.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Methods"
+                ],
+                "summary": "Update a payment method",
+                "parameters": [
+                    {
+                        "description": "Update Method Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UpdateMethodRequest"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Method ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.MethodResponseWrapper"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorWrapper"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorWrapper"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a payment method with the provided details.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Methods"
+                ],
+                "summary": "Delete a payment method",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Method ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.MethodResponseWrapper"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorWrapper"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/model.ErrorWrapper"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -352,10 +580,106 @@
                 }
             }
         },
+        "model.CreateMethodRequest": {
+            "type": "object",
+            "required": [
+                "code",
+                "name",
+                "userAction"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "desc": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "orderNum": {
+                    "type": "integer"
+                },
+                "userAction": {
+                    "type": "string"
+                }
+            }
+        },
         "model.ErrorWrapper": {
             "type": "object",
             "properties": {
                 "data": {},
+                "error": {
+                    "type": "string"
+                },
+                "meta": {
+                    "$ref": "#/definitions/model.PaginationPage"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.MethodResponse": {
+            "type": "object",
+            "required": [
+                "code",
+                "name",
+                "userAction"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "desc": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "orderNum": {
+                    "type": "integer"
+                },
+                "updatedAt": {
+                    "type": "string"
+                },
+                "userAction": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.MethodResponseWrapper": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/model.MethodResponse"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "meta": {
+                    "$ref": "#/definitions/model.PaginationPage"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "model.MethodsResponseWrapper": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.MethodResponse"
+                    }
+                },
                 "error": {
                     "type": "string"
                 },
@@ -423,6 +747,31 @@
                     "type": "integer"
                 },
                 "paymentMethodId": {
+                    "type": "integer"
+                },
+                "userAction": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UpdateMethodRequest": {
+            "type": "object",
+            "required": [
+                "code",
+                "name",
+                "userAction"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "desc": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "orderNum": {
                     "type": "integer"
                 },
                 "userAction": {
