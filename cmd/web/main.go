@@ -23,18 +23,18 @@ func main() {
 	db := config.NewDatabase(viperConfig, log)
 	validator := config.NewValidator(viperConfig)
 
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "*",
+		AllowMethods:     "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
+	}))
+
 	config.Bootstrap(&config.BootstrapConfig{
 		DB: db,
 		App: app,
 		Log: log,
 		Validate: validator,
 	})
-
-	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "*",
-		AllowMethods:     "GET, POST, PUT, PATCH, DELETE, OPTIONS",
-		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
-	}))
 
 	app.Get("/reference", func(ctx *fiber.Ctx) error {
 		html, err := scalar.ApiReferenceHTML(&scalar.Options{
