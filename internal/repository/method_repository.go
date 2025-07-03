@@ -22,6 +22,9 @@ func (mr *MethodRepository) FindById(db *gorm.DB, method *entity.PaymentMethod, 
 	return db.Where("id = ?", id).Take(method).Error
 }
 
+func (mr *MethodRepository) FindMethodByName(db *gorm.DB, name string) error {
+	return db.Where("name = ?", name).Take(&entity.PaymentMethod{}).Error
+}
 
 func (mr *MethodRepository) FilterMethod(request *model.FilterMethodRequest) func(tx *gorm.DB) *gorm.DB {
 	return func(tx *gorm.DB) *gorm.DB {

@@ -39,6 +39,11 @@ func (m *MethodUseCase) Create(ctx context.Context, request *model.CreateMethodR
 		return nil, fiber.ErrBadRequest
 	}
 
+	if err := m.MethodRepository.FindMethodByName(tx, request.Name); err == nil {
+		m.Log.WithField("name", request.Name).Error("Payment method with this name already exists")
+		return nil, fiber.ErrConflict
+	}
+
 	method := &entity.PaymentMethod{
 		Name: request.Name,
 		Desc: sql.NullString{String: request.Desc, Valid: request.Desc != ""},
