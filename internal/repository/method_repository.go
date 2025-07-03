@@ -36,18 +36,22 @@ func (mr *MethodRepository) FilterMethod(request *model.FilterMethodRequest) fun
 			name = "%" + name + "%"
 			tx = tx.Where("name LIKE ?", name)
 		}
-	return tx
+		return tx
 	}
 }
 
 func (mr *MethodRepository) Search(db *gorm.DB, request *model.FilterMethodRequest) ([]entity.PaymentMethod, int64, error) {
 	var methods []entity.PaymentMethod
-	if err := db.Scopes(mr.FilterMethod(request)).Offset((request.Page - 1) * request.Limit).Find(&methods).Error; err != nil {
+	var total int64
+
+	baseQuery := db.Model(&entity.PaymentMethod{}).Scopes(mr.FilterMethod(request))
+
+	if err := baseQuery.Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
 
-	var total int64 = 0
-	if err := db.Model(&entity.PaymentMethod{}).Scopes(mr.FilterMethod(request)).Count(&total).Error; err != nil {
+	err := baseQuery.Offset((request.Page - 1) * request.Limit).Limit(request.Limit).Find(&methods).Error
+	if err != nil {
 		return nil, 0, err
 	}
 

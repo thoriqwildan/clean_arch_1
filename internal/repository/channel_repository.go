@@ -51,12 +51,19 @@ func (cr *ChannelRepository) FilterChannel(request *model.FilterChannelQuery) fu
 
 func (cr *ChannelRepository) Search(db *gorm.DB, request *model.FilterChannelQuery) ([]entity.PaymentChannel, int64, error) {
 	var channels []entity.PaymentChannel
-	if err := db.Scopes(cr.FilterChannel(request)).Offset((request.Page - 1) * request.Limit).Find(&channels).Error; err != nil {
+	var total int64
+
+	baseQuery := db.Model(&entity.PaymentChannel{}).Scopes(cr.FilterChannel(request))
+
+	if err := baseQuery.Count(&total).Error; err != nil {
 		return nil, 0, err
 	}
 
-	var total int64 = 0
-	if err := db.Model(&entity.PaymentChannel{}).Scopes(cr.FilterChannel(request)).Count(&total).Error; err != nil {
+	err := baseQuery.
+		Offset((request.Page - 1) * request.Limit).
+		Limit(request.Limit).
+		Find(&channels).Error
+	if err != nil {
 		return nil, 0, err
 	}
 
