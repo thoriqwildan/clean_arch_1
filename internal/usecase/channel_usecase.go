@@ -194,3 +194,26 @@ func (c *ChannelUseCase) UpdateChannel(ctx context.Context, request *model.Updat
 	}
 	return converter.ChannelToResponse(channel, method), nil
 }
+
+func (c *ChannelUseCase) Delete(ctx context.Context, id any) error {
+	tx := c.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	channel := &entity.PaymentChannel{}
+	if err := c.ChannelRepository.FindById(tx, channel, id); err != nil {
+		c.Log.WithError(err).Error("Payment channel not found")
+		return fiber.ErrNotFound
+	}
+
+	if err := c.ChannelRepository.Delete(tx, channel); err != nil {
+		c.Log.WithError(err).Error("Failed to delete payment channel")
+		return fiber.ErrInternalServerError
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		c.Log.WithError(err).Error("Failed to commit transaction")
+		return fiber.ErrInternalServerError
+	}
+
+	return nil
+}

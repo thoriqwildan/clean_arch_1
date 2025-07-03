@@ -98,3 +98,18 @@ func (cc *ChannelController) Update(ctx *fiber.Ctx) error {
 
 	return ctx.JSON(model.WebResponse[model.ChannelResponse]{Data: *response})
 }
+
+func (cc *ChannelController) Delete(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	if id == "" {
+		cc.Log.Error("ID parameter is required")
+		return fiber.ErrBadRequest
+	}
+
+	if err := cc.UseCase.Delete(ctx.UserContext(), id); err != nil {
+		cc.Log.WithError(err).Error("Failed to delete payment channel")
+		return err
+	}
+
+	return ctx.JSON(model.WebResponse[any]{Data: nil})
+}

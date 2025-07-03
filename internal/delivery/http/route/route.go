@@ -26,4 +26,5 @@ func (rc *RouteConfig) SetupGeneralRoutes() {
 	rc.App.Get("/api/channels/:id", rc.ChannelController.FindById)
 	rc.App.Get("/api/channels", rc.ChannelController.Get)
 	rc.App.Put("/api/channels/:id", rc.ChannelController.Update)
+	rc.App.Delete("/api/channels/:id", rc.ChannelController.Delete)
 }

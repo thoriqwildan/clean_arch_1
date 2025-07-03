@@ -14,7 +14,7 @@ func ChannelToResponse(channel *entity.PaymentChannel, method *entity.PaymentMet
 			Code: method.Code.String,
 		},
 		Code: channel.Code,
-		IconUrl: channel.Code,
+		IconUrl: channel.IconUrl.String,
 		OrderNum: int(channel.OrderNum.Int64),
 		LibName: channel.LibName.String,
 		Mdr: channel.MDR,
