@@ -34,3 +34,44 @@ func (cc *ChannelController) Create(ctx *fiber.Ctx) error {
 
 	return ctx.JSON(model.WebResponse[model.ChannelResponse]{Data: *response})
 }
+
+func (cc *ChannelController) FindById(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	if id == "" {
+		cc.Log.Error("ID parameter is required")
+		return fiber.ErrBadRequest
+	}
+
+	response, err := cc.UseCase.GetChannelById(ctx.UserContext(), id)
+	if err != nil {
+		cc.Log.WithError(err).Error("Failed to find payment channel")
+		return err
+	}
+	return ctx.JSON(model.WebResponse[model.ChannelResponse]{Data: *response})
+}
+
+func (cc *ChannelController) Get(ctx *fiber.Ctx) error {
+	query := &model.FilterChannelQuery{
+		Code: ctx.Query("code"),
+		Name: ctx.Query("name"),
+		Page: ctx.QueryInt("page", 1),
+		Limit: ctx.QueryInt("limit", 10),
+	}
+
+	responses, total, err := cc.UseCase.Get(ctx.UserContext(), query)
+	if err != nil {
+		cc.Log.WithError(err).Error("Failed to get payment channels")
+		return err
+	}
+
+	paging := &model.PaginationPage{
+		Page: query.Page,
+		Limit: query.Limit,
+		Total: total,
+	}
+
+	return ctx.JSON(model.WebResponse[[]model.ChannelResponse]{
+		Data: responses,
+		Meta: paging,
+	})
+}

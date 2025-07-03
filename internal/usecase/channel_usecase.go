@@ -95,3 +95,55 @@ func (c *ChannelUseCase) Create(ctx context.Context, request *model.CreateChanne
 
 	return converter.ChannelToResponse(channel, method), nil
 }
+
+func (c *ChannelUseCase) GetChannelById(ctx context.Context, id any) (*model.ChannelResponse, error) {
+	tx := c.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	channel := &entity.PaymentChannel{}
+	if err := c.ChannelRepository.FindById(tx, channel, id); err != nil {
+		c.Log.WithError(err).Error("Failed to find payment channel by ID")
+		return nil, fiber.ErrNotFound
+	}
+
+	method := &entity.PaymentMethod{}
+	if err := c.ChannelRepository.FindMethodByChannel(tx, method, channel.PaymentMethodId); err != nil {
+		c.Log.WithError(err).Error("Failed to find payment method by channel")
+		return nil, fiber.ErrInternalServerError
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		c.Log.WithError(err).Error("Failed to commit transaction")
+		return nil, fiber.ErrInternalServerError
+	}
+
+	return converter.ChannelToResponse(channel, method), nil
+}
+
+func (c *ChannelUseCase) Get(ctx context.Context, request *model.FilterChannelQuery) ([]model.ChannelResponse, int64, error) {
+	tx := c.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	if err := c.Validate.Struct(request); err != nil {
+		c.Log.WithError(err).Error("Validation Error")
+		return nil, 0, fiber.ErrBadRequest
+	}
+
+	channels, total, err := c.ChannelRepository.Search(tx, request)
+	if err != nil {
+		c.Log.WithError(err).Error("Failed to filter payment channels")
+		return nil, 0, fiber.ErrInternalServerError
+	}
+
+	responses := make([]model.ChannelResponse, len(channels))
+	for i, channel := range channels {
+		method := &entity.PaymentMethod{}
+		if err := c.ChannelRepository.FindMethodByChannel(tx, method, channel.PaymentMethodId); err != nil {
+			c.Log.WithError(err).Error("Failed to find payment method by channel")
+			return nil, 0, fiber.ErrInternalServerError
+		}
+		responses[i] = *converter.ChannelToResponse(&channel, method)
+	}
+
+	return responses, total, nil
+}

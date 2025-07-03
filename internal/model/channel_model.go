@@ -30,3 +30,10 @@ type PaymentMethod struct {
 	Id  uint   `json:"id"`
 	Code string `json:"code"`
 }
+
+type FilterChannelQuery struct {
+	Code string `json:"code,omitempty"`
+	Name string `json:"name,omitempty"`
+	Page int `json:"page,omitempty" validate:"omitempty,numeric"`
+	Limit int `json:"limit,omitempty" validate:"omitempty,numeric"`
+}
