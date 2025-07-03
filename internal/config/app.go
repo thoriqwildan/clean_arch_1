@@ -22,14 +22,18 @@ type BootstrapConfig struct {
 
 func Bootstrap(config *BootstrapConfig) {
 	methodRepository := repository.NewMethodRepository(config.Log)
+	channelRepository := repository.NewChannelRepository(config.Log)
 
 	methodUseCase := usecase.NewMethodUseCase(config.DB, config.Log, config.Validate, methodRepository)
+	channelUseCase := usecase.NewChannelUseCase(config.DB, config.Log, channelRepository, config.Validate)
 
 	methodController := http.NewMethodController(methodUseCase, config.Log)
+	channelController := http.NewChannelController(channelUseCase, config.Log)
 
 	routeConfig := route.RouteConfig{
 		App: config.App,
 		MethodController: methodController,
+		ChannelController: channelController,
 	}
 
 	routeConfig.Setup()

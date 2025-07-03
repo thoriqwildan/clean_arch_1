@@ -8,6 +8,7 @@ import (
 type RouteConfig struct {
 	App *fiber.App
 	MethodController *http.MethodController
+	ChannelController *http.ChannelController
 }
 
 func (rc *RouteConfig) Setup() {
@@ -20,4 +21,6 @@ func (rc *RouteConfig) SetupGeneralRoutes() {
 	rc.App.Get("/api/methods/:id", rc.MethodController.FindById)
 	rc.App.Put("/api/methods/:id", rc.MethodController.Update)
 	rc.App.Delete("/api/methods/:id", rc.MethodController.Delete)
+
+	rc.App.Post("/api/channels", rc.ChannelController.Create)
 }
