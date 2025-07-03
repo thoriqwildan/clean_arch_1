@@ -1,0 +1,288 @@
+basePath: /
+definitions:
+  model.ChannelResponse:
+    properties:
+      code:
+        type: string
+      createdAt:
+        type: string
+      fixedFee:
+        type: number
+      iconUrl:
+        type: string
+      id:
+        type: integer
+      libName:
+        type: string
+      mdr:
+        type: string
+      name:
+        type: string
+      orderNum:
+        type: integer
+      paymentMethod:
+        $ref: '#/definitions/model.PaymentMethod'
+      updatedAt:
+        type: string
+    type: object
+  model.ChannelResponseWrapper:
+    properties:
+      data:
+        $ref: '#/definitions/model.ChannelResponse'
+      error:
+        type: string
+      meta:
+        $ref: '#/definitions/model.PaginationPage'
+      success:
+        type: boolean
+    type: object
+  model.ChannelsResponseWrapper:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/model.ChannelResponse'
+        type: array
+      error:
+        type: string
+      meta:
+        $ref: '#/definitions/model.PaginationPage'
+      success:
+        type: boolean
+    type: object
+  model.CreateChannelRequest:
+    properties:
+      code:
+        type: string
+      fixedFee:
+        type: number
+      iconUrl:
+        type: string
+      libName:
+        type: string
+      mdr:
+        type: integer
+      name:
+        type: string
+      orderNum:
+        type: integer
+      paymentMethodId:
+        type: integer
+      userAction:
+        type: string
+    required:
+    - code
+    - name
+    - paymentMethodId
+    - userAction
+    type: object
+  model.ErrorWrapper:
+    properties:
+      data: {}
+      error:
+        type: string
+      meta:
+        $ref: '#/definitions/model.PaginationPage'
+      success:
+        type: boolean
+    type: object
+  model.PaginationPage:
+    properties:
+      limit:
+        type: integer
+      page:
+        type: integer
+      total:
+        type: integer
+    type: object
+  model.PaymentMethod:
+    properties:
+      code:
+        type: string
+      id:
+        type: integer
+    type: object
+  model.UpdateChannelRequest:
+    properties:
+      code:
+        type: string
+      fixedFee:
+        type: number
+      iconUrl:
+        type: string
+      libName:
+        type: string
+      mdr:
+        type: integer
+      name:
+        type: string
+      orderNum:
+        type: integer
+      paymentMethodId:
+        type: integer
+      userAction:
+        type: string
+    required:
+    - code
+    - name
+    - paymentMethodId
+    - userAction
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  description: This is a sample swagger for Fiber
+  title: SVD Clone API
+  version: "1.0"
+paths:
+  /api/channels:
+    get:
+      consumes:
+      - application/json
+      description: Find a payment channel by its ID.
+      parameters:
+      - description: Filter by channel name
+        in: query
+        name: name
+        type: string
+      - description: Filter by channel code
+        in: query
+        name: code
+        type: string
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Number of items per page
+        in: query
+        name: limit
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ChannelsResponseWrapper'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+      summary: Find a payment channels
+      tags:
+      - Channels
+    post:
+      consumes:
+      - application/json
+      description: Create a new payment channel with the provided details.
+      parameters:
+      - description: Create Channel Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.CreateChannelRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ChannelResponseWrapper'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+      summary: Create a new payment channel
+      tags:
+      - Channels
+  /api/channels/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a payment channel with the provided details.
+      parameters:
+      - description: Channel ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ChannelResponseWrapper'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+      summary: Delete a payment channel
+      tags:
+      - Channels
+    get:
+      consumes:
+      - application/json
+      description: Find a payment channel by its ID.
+      parameters:
+      - description: Channel ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ChannelResponseWrapper'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+      summary: Find a payment channel by ID
+      tags:
+      - Channels
+    put:
+      consumes:
+      - application/json
+      description: Update a payment channel with the provided details.
+      parameters:
+      - description: Update Channel Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/model.UpdateChannelRequest'
+      - description: Channel ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ChannelResponseWrapper'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/model.ErrorWrapper'
+      summary: Update a payment channel
+      tags:
+      - Channels
+swagger: "2.0"

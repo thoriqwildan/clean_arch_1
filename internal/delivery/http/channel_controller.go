@@ -19,6 +19,15 @@ func NewChannelController(useCase *usecase.ChannelUseCase, log *logrus.Logger) *
 	}
 }
 
+// @Router /api/channels [post]
+// @Param  request body model.CreateChannelRequest true "Create Channel Request"
+// @Success 200 {object} model.ChannelResponseWrapper
+// @Failure 400 {object} model.ErrorWrapper "Bad Request"
+// @Failure 500 {object} model.ErrorWrapper "Internal Server Error"
+// @Tags Channels
+// @Summary Create a new payment channel
+// @Description Create a new payment channel with the provided details.
+// @Accept json
 func (cc *ChannelController) Create(ctx *fiber.Ctx) error {
 	request := new(model.CreateChannelRequest)
 	if err := ctx.BodyParser(request); err != nil {
@@ -35,6 +44,15 @@ func (cc *ChannelController) Create(ctx *fiber.Ctx) error {
 	return ctx.JSON(model.WebResponse[model.ChannelResponse]{Success: true, Data: *response})
 }
 
+// @Router /api/channels/{id} [get]
+// @Success 200 {object} model.ChannelResponseWrapper
+// @Failure 400 {object} model.ErrorWrapper "Bad Request"
+// @Failure 500 {object} model.ErrorWrapper "Internal Server Error"
+// @Tags Channels
+// @Summary Find a payment channel by ID
+// @Description Find a payment channel by its ID.
+// @Param id path string true "Channel ID"
+// @Accept json
 func (cc *ChannelController) FindById(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	if id == "" {
@@ -50,6 +68,18 @@ func (cc *ChannelController) FindById(ctx *fiber.Ctx) error {
 	return ctx.JSON(model.WebResponse[model.ChannelResponse]{Success: true, Data: *response})
 }
 
+// @Router /api/channels [get]
+// @Success 200 {object} model.ChannelsResponseWrapper
+// @Failure 400 {object} model.ErrorWrapper "Bad Request"
+// @Failure 500 {object} model.ErrorWrapper "Internal Server Error"
+// @Tags Channels
+// @Summary Find a payment channels
+// @Description Find a payment channel by its ID.
+// @Param   name query     string            false       "Filter by channel name"
+// @Param   code query     string            false       "Filter by channel code"
+// @Param   page query     int               false       "Page number" default(1)
+// @Param   limit query    int               false       "Number of items per page" default
+// @Accept json
 func (cc *ChannelController) Get(ctx *fiber.Ctx) error {
 	query := &model.FilterChannelQuery{
 		Code: ctx.Query("code"),
@@ -77,6 +107,16 @@ func (cc *ChannelController) Get(ctx *fiber.Ctx) error {
 	})
 }
 
+// @Router /api/channels/{id} [put]
+// @Param  request body model.UpdateChannelRequest true "Update Channel Request"
+// @Param id path string true "Channel ID"
+// @Success 200 {object} model.ChannelResponseWrapper
+// @Failure 400 {object} model.ErrorWrapper "Bad Request"
+// @Failure 500 {object} model.ErrorWrapper "Internal Server Error"
+// @Tags Channels
+// @Summary Update a payment channel
+// @Description Update a payment channel with the provided details.
+// @Accept json
 func (cc *ChannelController) Update(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	if id == "" {
@@ -100,6 +140,15 @@ func (cc *ChannelController) Update(ctx *fiber.Ctx) error {
 	return ctx.JSON(model.WebResponse[model.ChannelResponse]{Success: true, Data: *response})
 }
 
+// @Router /api/channels/{id} [delete]
+// @Param id path string true "Channel ID"
+// @Success 200 {object} model.ChannelResponseWrapper
+// @Failure 400 {object} model.ErrorWrapper "Bad Request"
+// @Failure 500 {object} model.ErrorWrapper "Internal Server Error"
+// @Tags Channels
+// @Summary Delete a payment channel
+// @Description Delete a payment channel with the provided details.
+// @Accept json
 func (cc *ChannelController) Delete(ctx *fiber.Ctx) error {
 	id := ctx.Params("id")
 	if id == "" {
