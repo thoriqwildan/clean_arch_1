@@ -37,3 +37,16 @@ type FilterChannelQuery struct {
 	Page int `json:"page,omitempty" validate:"omitempty,numeric"`
 	Limit int `json:"limit,omitempty" validate:"omitempty,numeric"`
 }
+
+type UpdateChannelRequest struct {
+	ID 					string `json:"-" validate:"required,numeric"`
+	Name				string `json:"name" validate:"required"`
+	Code 				string `json:"code,omitempty" validate:"required"`
+	PaymentMethodId uint   `json:"paymentMethodId" validate:"required"`
+	IconUrl			string `json:"iconUrl,omitempty"`
+	OrderNum		int    `json:"orderNum,omitempty" validate:"omitempty,numeric"`
+	LibName			string `json:"libName,omitempty"`
+	Mdr 				int `json:"mdr,omitempty" validate:"omitempty,numeric"`
+	FixedFee		float64 `json:"fixedFee,omitempty" validate:"omitempty,numeric"`
+	UserAction	string `json:"userAction" validate:"required"`
+}

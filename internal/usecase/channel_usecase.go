@@ -147,3 +147,50 @@ func (c *ChannelUseCase) Get(ctx context.Context, request *model.FilterChannelQu
 
 	return responses, total, nil
 }
+
+func (c *ChannelUseCase) UpdateChannel(ctx context.Context, request *model.UpdateChannelRequest) (*model.ChannelResponse, error) {
+	tx := c.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	if err := c.Validate.Struct(request); err != nil {
+		c.Log.WithError(err).Error("Validation Error")
+		return nil, fiber.ErrBadRequest
+	}
+
+	channel := &entity.PaymentChannel{}
+	if err := c.ChannelRepository.FindById(tx, channel, request.ID); err != nil {
+		c.Log.WithError(err).Error("Payment channel not found")
+		return nil, fiber.ErrNotFound
+	}
+
+	if err := c.ChannelRepository.FindMethodById(tx, request.PaymentMethodId); err != nil {
+    c.Log.WithError(err).Error("Payment method not found")
+    return nil, fiber.ErrNotFound
+  }
+
+	channel.PaymentMethodId = request.PaymentMethodId
+	channel.Code = request.Code
+	channel.Name = request.Name
+	channel.IconUrl = sql.NullString{String: request.IconUrl, Valid: request.IconUrl != ""}
+	channel.OrderNum = sql.NullInt64{Int64: int64(request.OrderNum), Valid: request.OrderNum > 0}
+	channel.LibName = sql.NullString{String: request.LibName, Valid: request.LibName != ""}
+	channel.UserAction = request.UserAction
+	channel.MDR = strconv.Itoa(request.Mdr)
+	channel.FixedFee = float64(request.FixedFee)
+
+	if err := c.ChannelRepository.Update(tx, channel); err != nil {
+		c.Log.WithError(err).Error("Failed to update payment channel")
+		return nil, fiber.ErrInternalServerError
+	}
+
+	method := &entity.PaymentMethod{}
+	if err := c.ChannelRepository.FindMethodByChannel(tx, method, channel.PaymentMethodId); err != nil {
+		c.Log.WithError(err).Error("Failed to find payment method by channel")
+		return nil, fiber.ErrInternalServerError
+	}
+	if err := tx.Commit().Error; err != nil {
+		c.Log.WithError(err).Error("Failed to commit transaction")
+		return nil, fiber.ErrInternalServerError
+	}
+	return converter.ChannelToResponse(channel, method), nil
+}

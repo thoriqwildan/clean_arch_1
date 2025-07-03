@@ -75,3 +75,26 @@ func (cc *ChannelController) Get(ctx *fiber.Ctx) error {
 		Meta: paging,
 	})
 }
+
+func (cc *ChannelController) Update(ctx *fiber.Ctx) error {
+	id := ctx.Params("id")
+	if id == "" {
+		cc.Log.Error("ID parameter is required")
+		return fiber.ErrBadRequest
+	}
+
+	request := new(model.UpdateChannelRequest)
+	if err := ctx.BodyParser(request); err != nil {
+		cc.Log.WithError(err).Error("Failed to parse request body")
+		return fiber.ErrBadRequest
+	}
+
+	request.ID = id
+	response, err := cc.UseCase.UpdateChannel(ctx.UserContext(), request)
+	if err != nil {
+		cc.Log.WithError(err).Error("Failed to update payment channel")
+		return err
+	}
+
+	return ctx.JSON(model.WebResponse[model.ChannelResponse]{Data: *response})
+}
