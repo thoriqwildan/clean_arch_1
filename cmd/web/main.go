@@ -32,9 +32,8 @@ func main() {
 
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     "*",
-		AllowMethods:     "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+		AllowMethods:     "GET, POST, PUT, PATCH, DELETE, OPTIONS",
 		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
-		ExposeHeaders:    "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers",
 	}))
 
 	app.Get("/reference", func(ctx *fiber.Ctx) error {
