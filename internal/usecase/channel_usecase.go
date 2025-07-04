@@ -38,7 +38,7 @@ func (c *ChannelUseCase) Create(ctx context.Context, request *model.CreateChanne
 
 	if err := c.Validate.Struct(request); err != nil {
 		c.Log.WithError(err).Error("Validation Error")
-		return nil, fiber.ErrBadRequest
+		return nil, err
 	}
 
 	if err := c.ChannelRepository.FindChannelByName(tx, request.Name); err == nil {
@@ -126,7 +126,7 @@ func (c *ChannelUseCase) Get(ctx context.Context, request *model.FilterChannelQu
 
 	if err := c.Validate.Struct(request); err != nil {
 		c.Log.WithError(err).Error("Validation Error")
-		return nil, 0, fiber.ErrBadRequest
+		return nil, 0, err
 	}
 
 	channels, total, err := c.ChannelRepository.Search(tx, request)
@@ -154,7 +154,7 @@ func (c *ChannelUseCase) UpdateChannel(ctx context.Context, request *model.Updat
 
 	if err := c.Validate.Struct(request); err != nil {
 		c.Log.WithError(err).Error("Validation Error")
-		return nil, fiber.ErrBadRequest
+		return nil, err
 	}
 
 	channel := &entity.PaymentChannel{}

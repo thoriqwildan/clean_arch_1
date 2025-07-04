@@ -4,7 +4,7 @@ type WebResponse[T any] struct {
 	Success bool `json:"success"`
 	Data T `json:"data,omitempty"`
 	Meta *PaginationPage `json:"meta,omitempty"`
-	Error string `json:"error,omitempty"`
+	Error any `json:"error,omitempty"`
 }
 
 type PaginationPage struct {

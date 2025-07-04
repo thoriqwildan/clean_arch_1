@@ -36,7 +36,7 @@ func (m *MethodUseCase) Create(ctx context.Context, request *model.CreateMethodR
 
 	if err := m.Validate.Struct(request); err != nil {
 		m.Log.WithError(err).Error("Validation error")
-		return nil, fiber.ErrBadRequest
+		return nil, err
 	}
 
 	if err := m.MethodRepository.FindMethodByName(tx, request.Name); err == nil {
@@ -93,7 +93,7 @@ func (m *MethodUseCase) Get(ctx context.Context, request *model.FilterMethodRequ
 
 	if err := m.Validate.Struct(request); err != nil {
 		m.Log.WithError(err).Error("Validation error")
-		return nil, 0, fiber.ErrBadRequest
+		return nil, 0, err
 	}
 
 	methods, total, err := m.MethodRepository.Search(tx, request)
@@ -127,7 +127,7 @@ func (m *MethodUseCase) UpdateMethod(ctx context.Context, request *model.UpdateM
 
 	if err := m.Validate.Struct(request); err != nil {
 		m.Log.WithError(err).Error("Validation error")
-		return nil, fiber.ErrBadRequest
+		return nil, err
 	}
 
 	method.Name = request.Name
