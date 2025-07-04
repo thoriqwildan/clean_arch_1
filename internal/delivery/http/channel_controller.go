@@ -30,10 +30,7 @@ func NewChannelController(useCase *usecase.ChannelUseCase, log *logrus.Logger) *
 // @Accept json
 func (cc *ChannelController) Create(ctx *fiber.Ctx) error {
 	request := new(model.CreateChannelRequest)
-	if err := ctx.BodyParser(request); err != nil {
-		cc.Log.WithError(err).Error("Failed to parse request body")
-		return fiber.ErrBadRequest
-	}
+	ctx.BodyParser(&request)
 
 	response, err := cc.UseCase.Create(ctx.UserContext(), request)
 	if err != nil {
@@ -125,10 +122,7 @@ func (cc *ChannelController) Update(ctx *fiber.Ctx) error {
 	}
 
 	request := new(model.UpdateChannelRequest)
-	if err := ctx.BodyParser(request); err != nil {
-		cc.Log.WithError(err).Error("Failed to parse request body")
-		return fiber.ErrBadRequest
-	}
+	ctx.BodyParser(&request);
 
 	request.ID = id
 	response, err := cc.UseCase.UpdateChannel(ctx.UserContext(), request)

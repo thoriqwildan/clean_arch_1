@@ -29,11 +29,8 @@ func NewMethodController(useCase *usecase.MethodUseCase, log *logrus.Logger) *Me
 // @Description Create a new payment method with the provided details.
 // @Accept json
 func (mc *MethodController) Create(ctx *fiber.Ctx) error {
-	request := new(model.CreateMethodRequest)
-	if err := ctx.BodyParser(request); err != nil {
-		mc.Log.WithError(err).Error("Failed to parse request body")
-		return fiber.ErrBadRequest
-	}
+	request := &model.CreateMethodRequest{}
+	ctx.BodyParser(&request);
 
 	response, err := mc.UseCase.Create(ctx.UserContext(), request)
 	if err != nil {
@@ -119,10 +116,7 @@ func (mc *MethodController) Filter(ctx *fiber.Ctx) error {
 // @Accept json
 func (mc *MethodController) Update(ctx *fiber.Ctx) error {
 	request := new(model.UpdateMethodRequest)
-	if err := ctx.BodyParser(request); err != nil {
-		mc.Log.WithError(err).Error("Failed to parse request body")
-		return fiber.ErrBadRequest
-	}
+	ctx.BodyParser(&request);
 
 	request.ID = ctx.Params("id")
 
