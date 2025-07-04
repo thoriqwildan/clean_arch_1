@@ -14,7 +14,7 @@ import (
 // @title SVD Clone API
 // @version 1.0
 // @description This is a sample swagger for Fiber
-// @host localhost:3000
+// @host 103.210.35.189:5134
 // @BasePath /
 func main() {
 	viperConfig := config.NewViper()
