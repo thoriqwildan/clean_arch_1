@@ -6,7 +6,7 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "103.210.35.189:5134",
+    "host": "103.210.35.189:8134",
     "basePath": "/",
     "paths": {
         "/api/channels": {
