@@ -21,7 +21,7 @@ type ChannelResponse struct {
 	OrderNum          int     `json:"orderNum,omitempty"`
 	LibName           string  `json:"libName,omitempty"`
 	Mdr               string  `json:"mdr,omitempty"`
-	FixedFee          float64 `json:"fixedFee,omitempty"`
+	FixedFee          float64 `json:"fixedFee"`
 	CreatedAt        string  `json:"createdAt"`
 	UpdatedAt        string  `json:"updatedAt"`
 }
