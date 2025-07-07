@@ -203,7 +203,7 @@ definitions:
     - name
     - userAction
     type: object
-host: localhost:3000
+host: 103.210.35.189:8134
 info:
   contact: {}
   description: This is a sample swagger for Fiber
