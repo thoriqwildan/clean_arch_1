@@ -9,7 +9,7 @@ func MethodToResponse(method *entity.PaymentMethod) *model.MethodResponse {
 	return &model.MethodResponse{
 		ID: method.ID,
 		Name: method.Name,
-		Desc: method.Desc.String,
+		Desc: method.Description.String,
 		OrderNum: method.OrderNum,
 		UserAction: method.UserAction,
 		Code: method.Code.String,

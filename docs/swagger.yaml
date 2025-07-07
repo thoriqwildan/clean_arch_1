@@ -29,8 +29,7 @@ definitions:
     properties:
       data:
         $ref: '#/definitions/model.ChannelResponse'
-      error:
-        type: string
+      error: {}
       meta:
         $ref: '#/definitions/model.PaginationPage'
       success:
@@ -42,8 +41,7 @@ definitions:
         items:
           $ref: '#/definitions/model.ChannelResponse'
         type: array
-      error:
-        type: string
+      error: {}
       meta:
         $ref: '#/definitions/model.PaginationPage'
       success:
@@ -95,8 +93,7 @@ definitions:
   model.ErrorWrapper:
     properties:
       data: {}
-      error:
-        type: string
+      error: {}
       meta:
         $ref: '#/definitions/model.PaginationPage'
       success:
@@ -129,8 +126,7 @@ definitions:
     properties:
       data:
         $ref: '#/definitions/model.MethodResponse'
-      error:
-        type: string
+      error: {}
       meta:
         $ref: '#/definitions/model.PaginationPage'
       success:
@@ -142,8 +138,7 @@ definitions:
         items:
           $ref: '#/definitions/model.MethodResponse'
         type: array
-      error:
-        type: string
+      error: {}
       meta:
         $ref: '#/definitions/model.PaginationPage'
       success:
@@ -208,7 +203,7 @@ definitions:
     - name
     - userAction
     type: object
-host: 103.210.35.189:8134
+host: localhost:3000
 info:
   contact: {}
   description: This is a sample swagger for Fiber

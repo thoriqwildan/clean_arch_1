@@ -7,11 +7,13 @@
     "port": 3000
   },
   "database": {
-    "username": "root",
-    "password": "140407",
+    "username": "golang",
+    "password": "golangpassword",
     "host": "localhost",
-    "port": 3306,
+    "port": 5432,
     "name": "svdb",
+    "schema": "svdschema",
+    "sslmode": "disable",
     "pool": {
       "idle": 10,
       "max": 100,

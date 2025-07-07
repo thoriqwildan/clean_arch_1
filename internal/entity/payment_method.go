@@ -8,7 +8,7 @@ import (
 type PaymentMethod struct {
 	ID 								uint
 	Name 							string	`gorm:"unique"`
-	Desc 			sql.NullString
+	Description 			sql.NullString
 	OrderNum					int	`gorm:"default:1"`
 	UserAction				string
 	CreatedAt					time.Time

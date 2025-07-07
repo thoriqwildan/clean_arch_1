@@ -46,7 +46,7 @@ func (m *MethodUseCase) Create(ctx context.Context, request *model.CreateMethodR
 
 	method := &entity.PaymentMethod{
 		Name: request.Name,
-		Desc: sql.NullString{String: request.Desc, Valid: request.Desc != ""},
+		Description: sql.NullString{String: request.Desc, Valid: request.Desc != ""},
 		OrderNum: request.OrderNum,
 		UserAction: request.UserAction,
 		Code: sql.NullString{String: request.Code, Valid: request.Code != ""},
@@ -131,7 +131,7 @@ func (m *MethodUseCase) UpdateMethod(ctx context.Context, request *model.UpdateM
 	}
 
 	method.Name = request.Name
-	method.Desc = sql.NullString{String: request.Desc, Valid: request.Desc != ""}
+	method.Description = sql.NullString{String: request.Desc, Valid: request.Desc != ""}
 	method.OrderNum = request.OrderNum
 	method.UserAction = request.UserAction
 	method.Code = sql.NullString{String: request.Code, Valid: request.Code != ""}

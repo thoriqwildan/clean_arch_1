@@ -517,9 +517,7 @@ const docTemplate = `{
                 "data": {
                     "$ref": "#/definitions/model.ChannelResponse"
                 },
-                "error": {
-                    "type": "string"
-                },
+                "error": {},
                 "meta": {
                     "$ref": "#/definitions/model.PaginationPage"
                 },
@@ -537,9 +535,7 @@ const docTemplate = `{
                         "$ref": "#/definitions/model.ChannelResponse"
                     }
                 },
-                "error": {
-                    "type": "string"
-                },
+                "error": {},
                 "meta": {
                     "$ref": "#/definitions/model.PaginationPage"
                 },
@@ -615,9 +611,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "data": {},
-                "error": {
-                    "type": "string"
-                },
+                "error": {},
                 "meta": {
                     "$ref": "#/definitions/model.PaginationPage"
                 },
@@ -666,9 +660,7 @@ const docTemplate = `{
                 "data": {
                     "$ref": "#/definitions/model.MethodResponse"
                 },
-                "error": {
-                    "type": "string"
-                },
+                "error": {},
                 "meta": {
                     "$ref": "#/definitions/model.PaginationPage"
                 },
@@ -686,9 +678,7 @@ const docTemplate = `{
                         "$ref": "#/definitions/model.MethodResponse"
                     }
                 },
-                "error": {
-                    "type": "string"
-                },
+                "error": {},
                 "meta": {
                     "$ref": "#/definitions/model.PaginationPage"
                 },
@@ -791,7 +781,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "103.210.35.189:8134",
+	Host:             "localhost:3000",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "SVD Clone API",

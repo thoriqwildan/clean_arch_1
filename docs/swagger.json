@@ -6,7 +6,7 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "103.210.35.189:8134",
+    "host": "localhost:3000",
     "basePath": "/",
     "paths": {
         "/api/channels": {
@@ -511,9 +511,7 @@
                 "data": {
                     "$ref": "#/definitions/model.ChannelResponse"
                 },
-                "error": {
-                    "type": "string"
-                },
+                "error": {},
                 "meta": {
                     "$ref": "#/definitions/model.PaginationPage"
                 },
@@ -531,9 +529,7 @@
                         "$ref": "#/definitions/model.ChannelResponse"
                     }
                 },
-                "error": {
-                    "type": "string"
-                },
+                "error": {},
                 "meta": {
                     "$ref": "#/definitions/model.PaginationPage"
                 },
@@ -609,9 +605,7 @@
             "type": "object",
             "properties": {
                 "data": {},
-                "error": {
-                    "type": "string"
-                },
+                "error": {},
                 "meta": {
                     "$ref": "#/definitions/model.PaginationPage"
                 },
@@ -660,9 +654,7 @@
                 "data": {
                     "$ref": "#/definitions/model.MethodResponse"
                 },
-                "error": {
-                    "type": "string"
-                },
+                "error": {},
                 "meta": {
                     "$ref": "#/definitions/model.PaginationPage"
                 },
@@ -680,9 +672,7 @@
                         "$ref": "#/definitions/model.MethodResponse"
                     }
                 },
-                "error": {
-                    "type": "string"
-                },
+                "error": {},
                 "meta": {
                     "$ref": "#/definitions/model.PaginationPage"
                 },

@@ -30,11 +30,11 @@ func (mr *MethodRepository) FilterMethod(request *model.FilterMethodRequest) fun
 	return func(tx *gorm.DB) *gorm.DB {
 		if code := request.Code; code != "" {
 			code = "%" + code + "%"
-			tx = tx.Where("code LIKE ?", code)
+			tx = tx.Where("code ILIKE ?", code)
 		}
 		if name := request.Name; name != "" {
 			name = "%" + name + "%"
-			tx = tx.Where("name LIKE ?", name)
+			tx = tx.Where("name ILIKE ?", name)
 		}
 		return tx
 	}
