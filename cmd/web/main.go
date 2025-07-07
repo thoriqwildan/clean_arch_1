@@ -40,6 +40,8 @@ func main() {
 		html, err := scalar.ApiReferenceHTML(&scalar.Options{
 			SpecURL: "./docs/swagger.json",
 			DarkMode: true,
+			Theme: scalar.ThemeKepler,
+			Layout: scalar.LayoutModern,
 		})
 		if err != nil {
 			log.Error("Failed to generate API reference HTML: " + err.Error())
